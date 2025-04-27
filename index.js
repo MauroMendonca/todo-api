@@ -14,7 +14,7 @@ app.get('/tasks', (req, res) => {
 
 // [POST] Create new task
 app.post('/tasks', (req, res) => {
-    const {title, priority = 'média', tags = [], date} = req.body;
+    const {title, priority = 'medium', tags = [], date} = req.body;
 
     if (!title) {
         return res.status(400).json({message: 'Title is required.'});

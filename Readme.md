@@ -19,7 +19,7 @@ A simple API for task management using **Node.js** + **Express**.
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/your-username/todo-api.git
+git clone https://github.com/MauroMendonca/todo-api.git
 cd todo-api
 ```
 
