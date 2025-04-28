@@ -1,8 +1,8 @@
 const express = require('express');
-const app = express;
+const app = express();
 const PORT = 3000;
 
-app.request(express.json()); //Allows to receive JSON
+app.use(express.json()); //Allows to receive JSON
 
 //Array to be used as a database
 let tasks = [];
@@ -32,6 +32,9 @@ app.post('/tasks', (req, res) => {
         date: date ? new Date(date) : null,
         done: false,
     }
+
+    tasks.push(newTask);
+    res.status(201).json(newTask);
 });
 
 // [PUT] Update a task
@@ -43,7 +46,7 @@ app.put('/tasks/:id', (req, res) => {
     if (!task) return res.status(404).json({message: 'Task not found.'});
 
     if(title) task.title = title;
-    if(typeof done === 'bollean') task.done = done;
+    if(typeof done === 'boolean') task.done = done;
     if(priority) task.priority = priority;
     if(date){
         if(isNaN(Date.parse(date))){
