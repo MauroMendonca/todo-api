@@ -1,7 +1,7 @@
 
 # 📋 Todo API
 
-A simple API for task management using **Node.js** + **Express**.
+A simple API for task management using **Node.js** + **Express** + **MongoDB Atlas**.
 
 ## 📦 Features
 
@@ -29,7 +29,17 @@ cd todo-api
 npm install
 ```
 
-3. Start the server:
+3. Configure .evn file:
+
+Create a `.env` file in the root of the project and configure the MongoDB connection URL:
+
+```bash
+MONGODB_URI=mongodb+srv://<USUARIO>:<SENHA>@<CLUSTER>.mongodb.net/todo-db?retryWrites=true&w=majority
+PORT=3000
+```
+
+
+4. Start the server:
 
 ```bash
 node index.js
@@ -47,7 +57,7 @@ The server will be available at:
 | PUT    | `/tasks/:id`    | Update a task |
 | DELETE | `/tasks/:id`    | Delete a task |
 
-## ✍️ Example of creating a task (`POST /tasks`)
+## ✍️  Example of creating a task (`POST /tasks`)
 
 ```json
 {
@@ -62,10 +72,11 @@ The server will be available at:
 
 - [Node.js](https://nodejs.org/)
 - [Express](https://expressjs.com/)
+- [dotenv](https://npmjs.com/package/dotenv)
+- [MongoDB Atlas](https://mongodb.com/)
 
 ## 📚 Future improvements
 
-- Connect to a database (MongoDB)
 - Filters on listing (by priority, tags, or date)
 - Sort tasks by date
 - Authentication system (user login)
