@@ -57,6 +57,23 @@ The server will be available at:
 | PUT    | `/tasks/:id`    | Update a task |
 | DELETE | `/tasks/:id`    | Delete a task |
 
+#### ✅ Query Parameters (optional):
+| Parameter | Type   | Description                                |
+|------------|--------|--------------------------------------------|
+| `tags`     | string | Filter by one or more tags (comma-separated or repeated) |
+| `priority` | string | Filter by priority (`low`, `medium`, `high`) |
+| `date`     | date   | Filter by date (format: `YYYY-MM-DD`)     |
+
+---
+
+### 🔧 **Examples of GET with filters:**
+
+#### ✅ Combine multiple filters
+- Comma-separated:
+```bash
+GET /tasks?tags=work,health&priority=medium&date=2025-06-14
+```
+
 ## ✍️  Example of creating a task (`POST /tasks`)
 
 ```json

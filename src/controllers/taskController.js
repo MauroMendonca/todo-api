@@ -2,8 +2,37 @@ const Task = require('../models/Task');
 
 // [GET] Get all tasks
 const getAllTasks = async (req, res) => {
-  const tasks = await Task.find();
-  res.json(tasks);
+  try {
+    const { tags, priority, date } = req.query;
+
+    const filter = {};
+
+    if (tags) {
+      filter.tags = tags;
+    }
+
+    if (priority) {
+      filter.priority = priority;
+    }
+
+    if (date) {
+      const startDate = new Date(date);
+      const endDate = new Date(date);
+      endDate.setDate(endDate.getDate() + 1);
+
+      filter.date = {
+        $gte: startDate,
+        $lt: endDate
+      };
+    }
+
+    const tasks = await Task.find(filter);
+
+    res.status(200).json(tasks);
+
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 };
 
 // [POST] Create a new task
