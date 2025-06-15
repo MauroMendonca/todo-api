@@ -65,14 +65,65 @@ The server will be available at:
 | `date`     | date   | Filter by date (format: `YYYY-MM-DD`)     |
 
 ---
+### 🔥 Examples:
 
-### 🔧 **Examples of GET with filters:**
-
-#### ✅ Combine multiple filters
-- Comma-separated:
-```bash
-GET /tasks?tags=work,health&priority=medium&date=2025-06-14
+- ✅ Get all tasks:
+```http
+GET /tasks
 ```
+
+- ✅ Filter by one tag:
+```http
+GET /tasks?tags=work
+```
+
+- ✅ Filter by multiple tags (two valid ways):
+```http
+GET /tasks?tags=work,study
+```
+or
+```http
+GET /tasks?tags=work&tags=study
+```
+
+- ✅ Filter by priority:
+```http
+GET /tasks?priority=high
+```
+
+- ✅ Filter by date (YYYY-MM-DD):
+```http
+GET /tasks?date=2025-06-30
+```
+
+- ✅ Combine multiple filters:
+```http
+GET /tasks?tags=work,study&priority=medium&date=2025-06-30
+```
+
+### 🔧 Example Response:
+```json
+[
+  {
+    "_id": "665f4b1e9b7e2a1f4e3b6789",
+    "title": "Finish project",
+    "description": "Complete the backend API",
+    "tags": ["work", "backend"],
+    "priority": "high",
+    "date": "2025-06-30T00:00:00.000Z",
+    "createdAt": "2025-06-25T14:23:45.123Z",
+    "__v": 0
+  }
+]
+```
+
+### ⚠️ Notes:
+- When filtering by `tags`, you can:
+  - Use a comma-separated list (`tags=work,study`).
+  - Or repeat the parameter (`tags=work&tags=study`).
+- The date filter returns tasks scheduled for the specific day (`YYYY-MM-DD`), from midnight to midnight.
+
+---
 
 ## ✍️  Example of creating a task (`POST /tasks`)
 
