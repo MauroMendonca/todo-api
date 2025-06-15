@@ -8,7 +8,8 @@ const getAllTasks = async (req, res) => {
     const filter = {};
 
     if (tags) {
-      filter.tags = tags;
+      const tagsArray = Array.isArray(tags) ? tags : tags.split(',');
+      filter.tags = { $in: tagsArray };
     }
 
     if (priority) {
