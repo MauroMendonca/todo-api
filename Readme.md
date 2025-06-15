@@ -123,7 +123,6 @@ GET /tasks?tags=work,study&priority=medium&date=2025-06-30
   - Or repeat the parameter (`tags=work&tags=study`).
 - The date filter returns tasks scheduled for the specific day (`YYYY-MM-DD`), from midnight to midnight.
 
----
 
 ## ✍️  Example of creating a task (`POST /tasks`)
 
@@ -145,7 +144,6 @@ GET /tasks?tags=work,study&priority=medium&date=2025-06-30
 
 ## 📚 Future improvements
 
-- Filters on listing (by priority, tags, or date)
 - Sort tasks by date
 - Authentication system (user login)
 - Task pagination
