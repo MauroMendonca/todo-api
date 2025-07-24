@@ -5,7 +5,7 @@ const getAllTasks = async (req, res) => {
   try {
     const { tags, priority, date } = req.query;
 
-    const filter = {};
+    const filter = {userId: req.user._id};
 
     if (tags) {
       const tagsArray = Array.isArray(tags) ? tags : tags.split(',');
@@ -39,12 +39,13 @@ const getAllTasks = async (req, res) => {
 // [POST] Create a new task
 const createTask = async (req, res) => {
   try {
-    const { title, priority, tags = [], date } = req.body;
+    const { title, priority, tags = [], date, userId} = req.body;
     const task = new Task({
       title,
       priority,
       tags,
       date: date ? new Date(date) : null,
+      userId,
     });
     const savedTask = await task.save();
     res.status(201).json(savedTask);

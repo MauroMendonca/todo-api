@@ -1,7 +1,7 @@
 
 # 📋 Todo API
 
-A simple API for task management using **Node.js** + **Express** + **MongoDB Atlas**.
+A simple RESTful API for task management using **Node.js** + **Express** + **MongoDB Atlas** + **JSON Web Token (JWT)**.
 
 ## 📦 Features
 
@@ -47,6 +47,18 @@ node index.js
 
 The server will be available at:  
 `http://localhost:3000`
+
+## 🔐 Authentication
+
+Authentication is based on JWT. The user must register and log in to obtain a token. This token must be sent in the `Authorization` header on protected routes.
+
+### 🔐 Rotas de Autenticação
+
+| Method | Route            | Description |
+|--------|------------------|-------------|
+| POST    | `/auth/register`| List all tasks |
+| POST   | `/auth/login`    | Create a new task |
+| GET    | `/auth/me`       | Returns logged-in user information (protected route).|
 
 ## 🛠️ Endpoints
 
@@ -101,6 +113,13 @@ GET /tasks?date=2025-06-30
 GET /tasks?tags=work,study&priority=medium&date=2025-06-30
 ```
 
+- ✅ Request with Token
+```http
+GET /tasks HTTP/1.1
+Host: localhost:3000
+Authorization: Bearer seu_token_jwt_aqui
+```
+
 ### 🔧 Example Response:
 ```json
 [
@@ -141,11 +160,11 @@ GET /tasks?tags=work,study&priority=medium&date=2025-06-30
 - [Express](https://expressjs.com/)
 - [dotenv](https://npmjs.com/package/dotenv)
 - [MongoDB Atlas](https://mongodb.com/)
+- [JSON Web Token (JWT)](https://www.jwt.io/)
 
 ## 📚 Future improvements
 
 - Sort tasks by date
-- Authentication system (user login)
 - Task pagination
 
 ## 📝 License
