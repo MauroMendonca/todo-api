@@ -56,9 +56,9 @@ Authentication is based on JWT. The user must register and log in to obtain a to
 
 | Method | Route            | Description |
 |--------|------------------|-------------|
-| POST    | `/auth/register`| List all tasks |
-| POST   | `/auth/login`    | Create a new task |
-| GET    | `/auth/me`       | Returns logged-in user information (protected route).|
+| POST    | `/auth/register`| Creates a new user |
+| POST   | `/auth/login`    | Returns a JWT token for the authenticated user |
+| GET    | `/auth/me`       | Returns logged in user information (protected route)|
 
 ## 🛠️ Endpoints
 
