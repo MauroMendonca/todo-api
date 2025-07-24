@@ -52,7 +52,7 @@ The server will be available at:
 
 Authentication is based on JWT. The user must register and log in to obtain a token. This token must be sent in the `Authorization` header on protected routes.
 
-### 🔐 Rotas de Autenticação
+### 🔐 Authentication Endpoints
 
 | Method | Route            | Description |
 |--------|------------------|-------------|
