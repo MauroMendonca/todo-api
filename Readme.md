@@ -117,7 +117,7 @@ GET /tasks?tags=work,study&priority=medium&date=2025-06-30
 ```http
 GET /tasks HTTP/1.1
 Host: localhost:3000
-Authorization: Bearer seu_token_jwt_aqui
+Authorization: Bearer your_jwt_token_here
 ```
 
 ### 🔧 Example Response:
