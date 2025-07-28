@@ -54,7 +54,7 @@ const createTask = async (req, res) => {
   }
 };
 
-// [PUT] Update a task
+// [PATCH] Update a task
 const updateTask = async (req, res) => {
   try {
     const { title, done, priority, tags, date } = req.body;
@@ -66,13 +66,45 @@ const updateTask = async (req, res) => {
     if (tags) update.tags = tags;
     if (date) update.date = new Date(date);
 
-    const updatedTask = await Task.findByIdAndUpdate(req.params.id, update, { new: true });
+    const updatedTask = await Task.findOneAndUpdate(
+      { _id: req.params.id, userId: req.user._id },
+      update,
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedTask) return res.status(404).json({ message: 'Task not found or not yours.' });
 
     res.json(updatedTask);
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    res.status(500).json({ message: error.message });
   }
 };
+
+// [PUT] Replace a task
+const replaceTask = async (req, res) => {
+  try {
+    const newTask = req.body;
+    const { title, done, priority, tags, date } = req.body;
+
+    if (title) newTask.title = title;
+    if (typeof done === 'boolean') newTask.done = done;
+    if (priority) newTask.priority = priority;
+    if (tags) newTask.tags = tags;
+    if (date) newTask.date = new Date(date);
+
+    const replacedTask = await Task.findOneAndReplace(
+      { _id: req.params.id, userId: req.user._id },
+      newTask,
+      { new: true, runValidators: true }
+    );
+
+    if (!replacedTask) return res.status(404).json({ message: 'Task not found or not yours.' });
+
+    res.json(replacedTask);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}; 
 
 // [DELETE] Delete a task
 const deleteTask = async (req, res) => {
@@ -84,6 +116,7 @@ const deleteTask = async (req, res) => {
 module.exports = {
   getAllTasks,
   createTask,
+  replaceTask,
   updateTask,
   deleteTask,
 };
