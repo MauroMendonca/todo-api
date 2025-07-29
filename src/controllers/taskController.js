@@ -108,8 +108,8 @@ const replaceTask = async (req, res) => {
 
 // [DELETE] Delete a task
 const deleteTask = async (req, res) => {
-  const result = await Task.findByIdAndDelete(req.params.id);
-  if (!result) return res.status(404).json({ message: 'Task not found.' });
+  const result = await Task.findOneAndDelete({ _id: req.params.id, userId: req.user._id } );
+  if (!result) return res.status(404).json({ message: 'Task not found or not yours.' });
   res.status(204).send();
 };
 
