@@ -1,5 +1,5 @@
 
-# 📋 Todo API
+# 📋 ToDo API
 
 A simple RESTful API for task management using **Node.js** + **Express** + **MongoDB Atlas** + **JSON Web Token (JWT)**.
 
@@ -155,6 +155,28 @@ Authorization: Bearer your_jwt_token_here
   "tags": ["study", "backend"],
   "date": "2025-04-28T18:00:00Z"
 }
+```
+
+## 🔄 Pagination and Sorting
+
+The task listing route (`GET /tasks`) now accepts the following query parameters:
+
+### 🔹 Pagination Parameters
+| Parameter | Description                      | Example         |
+|-----------|----------------------------------|-----------------|
+| `page`    | Page number (default: 1)         | `?page=2`       |
+| `limit`   | Number of tasks per page         | `?limit=5`      |
+
+### 🔹 Sorting Parameters
+| Parameter | Description                                   | Example                   |
+|-----------|-----------------------------------------------|---------------------------|
+| `sortBy`  | Field to sort (`date`, `title`, `priority`)   | `?sortBy=date`            |
+| `order`   | Ordination order (`asc` ou `desc`)            | `?order=desc`             |
+
+### 🔹 Usage Example:
+
+```http
+GET /tasks?limit=10&page=2&sortBy=priority&order=asc
 ```
 
 ## ⚡ Technologies used

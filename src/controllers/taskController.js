@@ -3,7 +3,7 @@ const Task = require('../models/Task');
 // [GET] Get all tasks
 const getAllTasks = async (req, res) => {
   try {
-    const { tags, priority, date } = req.query;
+    const { tags, priority, date, page = 1, limit, sort = 'date', order = 'desc' } = req.query;
 
     const filter = {userId: req.user._id};
 
@@ -27,7 +27,10 @@ const getAllTasks = async (req, res) => {
       };
     }
 
-    const tasks = await Task.find(filter);
+    const tasks = await Task.find(filter)
+      .sort({ [sort]: order === 'asc' ? 1 : -1 })
+      .skip((page - 1) * limit)
+      .limit(Number(limit));
 
     res.status(200).json(tasks);
 
