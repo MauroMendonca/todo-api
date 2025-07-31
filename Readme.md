@@ -66,7 +66,7 @@ Authentication is based on JWT. The user must register and log in to obtain a to
 |--------|----------------|-------------|
 | GET    | `/tasks`        | List all user's tasks |
 | POST   | `/tasks`        | Create a new task |
-| POST   | `/tasks/bulk`   | Create batch jobs |
+| POST   | `/tasks/bulk`   | Create batch tasks |
 | PATCH  | `/tasks/:id`    | Update a task |
 | PUT    | `/tasks/:id`    | Replace a task |
 | DELETE | `/tasks/:id`    | Delete a task |
