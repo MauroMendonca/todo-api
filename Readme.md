@@ -187,11 +187,6 @@ GET /tasks?limit=10&page=2&sortBy=priority&order=asc
 - [MongoDB Atlas](https://mongodb.com/)
 - [JSON Web Token (JWT)](https://www.jwt.io/)
 
-## 📚 Future improvements
-
-- Sort tasks by date
-- Task pagination
-
 ## 📝 License
 
 This project is licensed under the MIT License.
