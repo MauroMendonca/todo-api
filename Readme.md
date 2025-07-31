@@ -64,11 +64,13 @@ Authentication is based on JWT. The user must register and log in to obtain a to
 
 | Method | Route          | Description |
 |--------|----------------|-------------|
-| GET    | `/tasks`        | List all tasks |
+| GET    | `/tasks`        | List all user's tasks |
 | POST   | `/tasks`        | Create a new task |
+| POST   | `/tasks/bulk`   | Create batch jobs |
 | PATCH  | `/tasks/:id`    | Update a task |
 | PUT    | `/tasks/:id`    | Replace a task |
 | DELETE | `/tasks/:id`    | Delete a task |
+| DELETE | `/tasks/clear`  | Delete all user's task |
 
 #### ✅ Query Parameters (optional):
 | Parameter | Type   | Description                                |

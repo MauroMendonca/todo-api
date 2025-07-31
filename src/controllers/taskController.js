@@ -113,10 +113,56 @@ const deleteTask = async (req, res) => {
   res.status(204).send();
 };
 
+// [POST] Create multiple tasks
+const createBulkTasks = async (req, res) => {
+  try {
+    const tasksData = req.body.tasks;
+    const userId = req.user._id;
+
+    if (!Array.isArray(tasksData) || tasksData.length === 0) return res.status(400).json({ message: 'Invalid tasks data.' });
+
+    const tasksToInsert = tasksData.map(task => ({
+      ...task,
+      userId
+    }));
+
+    const createdTasks = await Task.insertMany(tasksToInsert, { ordered: false });
+
+    return res.status(201).json({
+      message: `${createdTasks.length} tasks created successfully.`,
+      tasks: createdTasks
+    });
+  } catch (error) {
+    console.error('Error creating bulk tasks:', error);
+    
+    if (error.name === 'ValidationError' || error.name === 'BulkWriteError') {
+      return res.status(400).json({ error: 'Some tasks could not be created due to validation errors.', details: error.message });
+    }
+
+    return res.status(500).json({ error: 'An error occurred while creating tasks.', details: error.message });
+  }
+}
+
+// [DELETE] Clear all tasks
+const clearTasks = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const result = await Task.deleteMany({ userId });
+
+    return res.status(200).json({
+      message: `${result.deletedCount} tasks cleared successfully.`
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   getAllTasks,
   createTask,
   replaceTask,
   updateTask,
   deleteTask,
+  createBulkTasks,
+  clearTasks
 };
