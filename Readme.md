@@ -36,6 +36,7 @@ Create a `.env` file in the root of the project and configure the MongoDB connec
 ```bash
 MONGODB_URI=mongodb+srv://<USUARIO>:<SENHA>@<CLUSTER>.mongodb.net/todo-db?retryWrites=true&w=majority
 PORT=3000
+JWT_SECRET=yourSecretSentence
 ```
 
 
