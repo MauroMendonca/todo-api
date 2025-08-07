@@ -52,7 +52,7 @@ The server will be available at:
 
 The API features interactive documentation automatically generated with Swagger, making it easy to view endpoints, parameters, usage examples, and responses.
 You can access the full documentation using the link below:
-[Swagger Documentation](http://localhost:3000/api-docs/)
+[Swagger Documentation](https://todo-api-production-be35.up.railway.app/api-docs/)
 
 ## ⚡ Technologies used
 
