@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
+const cors = require("cors");
 const taskRoutes = require('./routes/taskRoutes');
 const userRoutes = require('./routes/userRoutes');
 
@@ -17,6 +18,7 @@ mongoose.connect(process.env.MONGODB_URI, {
 .catch(err => console.log('🔴 MongoDB connection error: ', err));
 
 app.use(express.json());
+app.use(cors());
 app.use('/tasks', taskRoutes);
 app.use('/auth', userRoutes);
 
