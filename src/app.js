@@ -4,8 +4,10 @@ const mongoose = require('mongoose');
 const taskRoutes = require('./routes/taskRoutes');
 const userRoutes = require('./routes/userRoutes');
 
-
 const app = express();
+
+const setupSwagger = require('./config/swagger'); 
+setupSwagger(app);
 
 mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
