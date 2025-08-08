@@ -13,6 +13,11 @@ const authMiddleware = require('../middlewares/authMiddleware');
  *       - bearerAuth: []
  *     parameters:
  *       - in: query
+ *         name: title
+ *         schema:
+ *           type: string
+ *         description: Filter tasks by title (partial match)
+ *       - in: query
  *         name: date
  *         schema:
  *           type: string
