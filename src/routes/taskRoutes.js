@@ -39,6 +39,11 @@ const authMiddleware = require('../middlewares/authMiddleware');
  *           enum: [low, medium, high]
  *         description: Filter tasks by priority
  *       - in: query
+ *         name: done
+ *         schema:
+ *           type: boolean
+ *         description: Filter tasks by completion status 
+ *       - in: query
  *         name: sortBy
  *         schema:
  *           type: string

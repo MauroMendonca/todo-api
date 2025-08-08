@@ -3,7 +3,7 @@ const Task = require('../models/Task');
 // [GET] Get all tasks
 const getAllTasks = async (req, res) => {
   try {
-    const { tags, priority, title, date, page = 1, limit, sort = 'date', order = 'desc' } = req.query;
+    const { tags, priority, title, date, done, page = 1, limit, sort = 'date', order = 'desc' } = req.query;
 
     const filter = {userId: req.user._id};
 
@@ -18,6 +18,10 @@ const getAllTasks = async (req, res) => {
 
     if (title) {
       filter.title = { $regex: title, $options: 'i' };
+    }
+
+    if (done !== undefined) {
+      filter.done = done === 'true';
     }
 
     if (date) {
