@@ -12,6 +12,11 @@ const options = {
     servers: [
       {
         url: 'http://localhost:3000',
+        description: 'Local Server',
+      },
+      {
+        url: 'https://todo-api-production-be35.up.railway.app',
+        description: 'Production Server (Railway)',
       },
     ],
     components: {
