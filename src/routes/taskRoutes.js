@@ -18,11 +18,17 @@ const authMiddleware = require('../middlewares/authMiddleware');
  *           type: string
  *         description: Filter tasks by title (partial match)
  *       - in: query
- *         name: date
+ *         name: starDate
  *         schema:
  *           type: string
  *           format: date
- *         description: Filter tasks created on this date
+ *         description: Filter tasks created from this date
+ *       - in: query
+ *         name: endDate
+ *         schema:
+ *           type: string
+ *           format: date
+ *         description: Filter tasks created up to this date
  *       - in: query
  *         name: tags
  *         schema:
