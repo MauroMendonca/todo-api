@@ -16,10 +16,13 @@ const authMiddleware = require('../middlewares/authMiddleware');
  *           schema:
  *             type: object
  *             required:
- *               - username
+ *               - name
+ *               - email
  *               - password
  *             properties:
- *               username:
+ *               name:
+ *                 type: string
+ *               email:
  *                 type: string
  *               password:
  *                 type: string
