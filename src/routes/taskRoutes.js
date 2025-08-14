@@ -224,7 +224,7 @@ router.delete('/clear', authMiddleware, taskController.clearTasks);
  *           type: string
  *         description: Task ID
  *     responses:
- *       200:
+ *       204:
  *         description: Task deleted successfully
  */
 router.delete('/:id', authMiddleware, taskController.deleteTask);
