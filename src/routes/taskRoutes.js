@@ -167,6 +167,34 @@ router.post('/bulk', authMiddleware,taskController.createBulkTasks);
  *         description: Task updated successfully
  */
 router.patch('/:id', authMiddleware, taskController.updateTask);
+/**
+ * @swagger
+ * /tasks/{id}/toggle:
+ *   patch:
+ *     summary: Toggle a task's completion status
+ *     tags: [Tasks]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Task ID
+ *     responses:
+ *       200:
+ *         description: Task updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Task'
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: Task not found
+ */
+router.patch('/:id/toggle', authMiddleware, taskController.toggleComplete);
 
 /**
  * @swagger

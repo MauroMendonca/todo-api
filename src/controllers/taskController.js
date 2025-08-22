@@ -5,7 +5,7 @@ const getAllTasks = async (req, res) => {
   try {
     const { tags, priority, title, starDate, endDate, done, page = 1, limit, sort = 'date', order = 'desc' } = req.query;
 
-    const filter = {userId: req.user._id};
+    const filter = { userId: req.user._id };
 
     if (tags) {
       const tagsArray = Array.isArray(tags) ? tags : tags.split(',');
@@ -24,7 +24,7 @@ const getAllTasks = async (req, res) => {
       filter.done = done === 'true';
     }
 
-    if  (starDate || endDate) {
+    if (starDate || endDate) {
       filter.date = {};
       if (starDate) {
         filter.date.$gte = new Date(starDate);
@@ -49,7 +49,7 @@ const getAllTasks = async (req, res) => {
 // [POST] Create a new task
 const createTask = async (req, res) => {
   try {
-    const { title, priority, tags = [], date, userId} = req.body;
+    const { title, priority, tags = [], date, userId } = req.body;
     const task = new Task({
       title,
       priority,
@@ -114,11 +114,26 @@ const replaceTask = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
-}; 
+};
+
+// [PATCH] Toggle complete status
+const toggleComplete = async (req, res) => {
+  try {
+    const task = await Task.findOne({ _id: req.params.id, userId: req.user._id });
+    if (!task) return res.status(404).json({ message: 'Task not found or not yours.' });
+
+    task.done = !task.done;
+    const saved = await task.save();
+
+    return res.status(200).json(saved);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
 
 // [DELETE] Delete a task
 const deleteTask = async (req, res) => {
-  const result = await Task.findOneAndDelete({ _id: req.params.id, userId: req.user._id } );
+  const result = await Task.findOneAndDelete({ _id: req.params.id, userId: req.user._id });
   if (!result) return res.status(404).json({ message: 'Task not found or not yours.' });
   res.status(204).send();
 };
@@ -144,7 +159,7 @@ const createBulkTasks = async (req, res) => {
     });
   } catch (error) {
     console.error('Error creating bulk tasks:', error);
-    
+
     if (error.name === 'ValidationError' || error.name === 'BulkWriteError') {
       return res.status(400).json({ error: 'Some tasks could not be created due to validation errors.', details: error.message });
     }
@@ -172,6 +187,7 @@ module.exports = {
   createTask,
   replaceTask,
   updateTask,
+  toggleComplete,
   deleteTask,
   createBulkTasks,
   clearTasks
