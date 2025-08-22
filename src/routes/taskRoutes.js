@@ -169,7 +169,7 @@ router.post('/bulk', authMiddleware,taskController.createBulkTasks);
 router.patch('/:id', authMiddleware, taskController.updateTask);
 /**
  * @swagger
- * /tasks/{id}/toggle:
+ * /tasks/toggle/{id}:
  *   patch:
  *     summary: Toggle a task's completion status
  *     tags: [Tasks]
@@ -194,7 +194,7 @@ router.patch('/:id', authMiddleware, taskController.updateTask);
  *       404:
  *         description: Task not found
  */
-router.patch('/:id/toggle', authMiddleware, taskController.toggleComplete);
+router.patch('/toggle/:id', authMiddleware, taskController.toggleComplete);
 
 /**
  * @swagger
