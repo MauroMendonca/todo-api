@@ -1,5 +1,6 @@
 const swaggerJSDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
+const { collection } = require('../models/Tag');
 
 const options = {
   definition: {
@@ -70,6 +71,48 @@ const options = {
               },
             },
           },
+        },
+      Tag: {
+          type: 'object',
+          properties: {
+            name: {
+              type: 'string',
+              description: 'Name of the tag',
+            },
+            color: {
+              type: 'string',
+              description: 'Color associated with the tag',
+            },
+            emoji: {
+              type: 'string',
+              description: 'Emoji associated with the tag',
+            },
+            userId: {
+              type: 'string',
+              description: 'ID of the user who created the tag',
+            },
+          },
+          required: ['name', 'userId'],
+        },
+        Error: {
+          type: 'object',
+          properties: {
+            message: {
+              type: 'string',
+              description: 'Error message',
+            },
+          },
+          required: ['message'],
+        },
+        Message: {
+          type: 'object',
+          properties: {
+            message: {
+              type: 'string',
+              description: 'Response message',
+            },
+          },
+          required: ['message'],
         },
       },
     },
