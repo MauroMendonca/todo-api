@@ -2,7 +2,15 @@ const Tag = require('../models/Tag');
 
 const getAllTags = async (req, res) => {
     try {
-        const tags = await Tag.find({ userId: req.user._id });
+        const {order = 'asc', sort = 'name'} = req.query;
+        const filter = { userId: req.user._id };
+
+        const tags = await Tag.find(filter)
+            .collation({ locale: "pt", strength: 1 })
+            .sort({ [sort]: order === 'asc' ? 1 : -1 });
+
+        console.log("sort", sort);
+        console.log("order", order);
         res.status(200).json(tags);
     } catch (error) {
         res.status(500).json({ error: error.message });
