@@ -3,7 +3,7 @@ const Task = require('../models/Task');
 // [GET] Get all tasks
 const getAllTasks = async (req, res) => {
   try {
-    const { tags, priority, title, starDate, endDate, done, page = 1, limit, sort = 'date', order = 'desc' } = req.query;
+    const { tags, priority, title, starDate, endDate, done, important, page = 1, limit, sort = 'date', order = 'desc' } = req.query;
 
     const filter = { userId: req.user._id };
 
@@ -22,6 +22,10 @@ const getAllTasks = async (req, res) => {
 
     if (done !== undefined) {
       filter.done = done === 'true';
+    }
+
+    if (important !== undefined) {
+      filter.important = important === 'true';
     }
 
     if (starDate || endDate) {
@@ -49,10 +53,11 @@ const getAllTasks = async (req, res) => {
 // [POST] Create a new task
 const createTask = async (req, res) => {
   try {
-    const { title, priority, tags = [], date, userId } = req.body;
+    const { title, priority, important, tags = [], date, userId } = req.body;
     const task = new Task({
       title,
       priority,
+      important: important || false,
       tags,
       date: date ? new Date(date) : null,
       userId,
@@ -67,12 +72,13 @@ const createTask = async (req, res) => {
 // [PATCH] Update a task
 const updateTask = async (req, res) => {
   try {
-    const { title, done, priority, tags, date } = req.body;
+    const { title, done, priority, important, tags, date } = req.body;
     const update = {};
 
     if (title) update.title = title;
     if (typeof done === 'boolean') update.done = done;
     if (priority) update.priority = priority;
+    if (typeof important === 'boolean') update.important = important;
     if (tags) update.tags = tags;
     if (date) update.date = new Date(date);
 
@@ -94,11 +100,12 @@ const updateTask = async (req, res) => {
 const replaceTask = async (req, res) => {
   try {
     const newTask = req.body;
-    const { title, done, priority, tags, date } = req.body;
+    const { title, done, priority, important, tags, date } = req.body;
 
     if (title) newTask.title = title;
     if (typeof done === 'boolean') newTask.done = done;
     if (priority) newTask.priority = priority;
+    if (typeof important === 'boolean') newTask.important = important;
     if (tags) newTask.tags = tags;
     if (date) newTask.date = new Date(date);
 
