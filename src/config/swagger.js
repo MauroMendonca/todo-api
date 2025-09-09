@@ -40,6 +40,10 @@ const options = {
               type: 'string',
               description: 'Title of the task',
             },
+            description: {
+              type: 'string',
+              description: 'Description of the task',
+            },
             priority: {
               type: 'string',
               enum: ['low', 'medium', 'high'],

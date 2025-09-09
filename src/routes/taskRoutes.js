@@ -18,6 +18,11 @@ const authMiddleware = require('../middlewares/authMiddleware');
  *           type: string
  *         description: Filter tasks by title (partial match)
  *       - in: query
+ *         name: description
+ *         schema:
+ *           type: string
+ *         description: Filter tasks by description (partial match)
+ *       - in: query
  *         name: starDate
  *         schema:
  *           type: string
