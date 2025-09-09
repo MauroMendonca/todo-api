@@ -138,6 +138,21 @@ const toggleComplete = async (req, res) => {
   }
 };
 
+//[PATCH] Toggle important status
+const toggleImportant = async (req, res) => {
+  try{
+    const task = await Task.findOne({ _id: req.params.id, userId: req.user._id});
+    if (!task) return res.status(404).json({message: 'Task not found or not yours.'});
+
+    task.important = !task.important;
+    const saved = await task.save();
+    
+    return res.status(200).json(saved);
+  }catch (error){
+    return res.status(500).json({message: error.message})
+  }
+};
+
 // [DELETE] Delete a task
 const deleteTask = async (req, res) => {
   const result = await Task.findOneAndDelete({ _id: req.params.id, userId: req.user._id });
@@ -195,6 +210,7 @@ module.exports = {
   replaceTask,
   updateTask,
   toggleComplete,
+  toggleImportant,
   deleteTask,
   createBulkTasks,
   clearTasks

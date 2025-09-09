@@ -203,6 +203,35 @@ router.patch('/toggle/:id', authMiddleware, taskController.toggleComplete);
 
 /**
  * @swagger
+ * /tasks/toggle-important/{id}:
+ *   patch:
+ *     summary: Toggle a task's important status
+ *     tags: [Tasks]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Task ID
+ *     responses:
+ *       200:
+ *         description: Task updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Task'
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: Task not found
+ */
+router.patch('/toggle-important/:id', authMiddleware, taskController.toggleImportant);
+
+/**
+ * @swagger
  * /tasks/{id}:
  *   put:
  *     summary: Replace a task by ID
