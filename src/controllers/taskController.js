@@ -228,7 +228,7 @@ const getTaskStats = async (req, res) => {
     const now = new Date();
     const overdue = await Task.countDocuments({
       userId,
-      completed: false,
+      done: false,
       date: { $lt: now },
     });
 
