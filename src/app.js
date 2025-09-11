@@ -1,10 +1,11 @@
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
-const cors = require("cors");
+const cors = require('cors');
 const taskRoutes = require('./routes/taskRoutes');
 const tagRoutes = require('./routes/tagRoutes');
 const userRoutes = require('./routes/userRoutes');
+const gamificationRoutes = require("./routes/gamificationRoutes");
 
 const app = express();
 
@@ -23,5 +24,6 @@ app.use(cors());
 app.use('/tasks', taskRoutes);
 app.use('/tags', tagRoutes);
 app.use('/auth', userRoutes);
+app.use('/gamification', gamificationRoutes);
 
 module.exports = app;
