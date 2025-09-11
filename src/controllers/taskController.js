@@ -147,16 +147,16 @@ const toggleComplete = async (req, res) => {
 
 //[PATCH] Toggle important status
 const toggleImportant = async (req, res) => {
-  try{
-    const task = await Task.findOne({ _id: req.params.id, userId: req.user._id});
-    if (!task) return res.status(404).json({message: 'Task not found or not yours.'});
+  try {
+    const task = await Task.findOne({ _id: req.params.id, userId: req.user._id });
+    if (!task) return res.status(404).json({ message: 'Task not found or not yours.' });
 
     task.important = !task.important;
     const saved = await task.save();
-    
+
     return res.status(200).json(saved);
-  }catch (error){
-    return res.status(500).json({message: error.message})
+  } catch (error) {
+    return res.status(500).json({ message: error.message })
   }
 };
 
@@ -211,6 +211,33 @@ const clearTasks = async (req, res) => {
   }
 };
 
+// [GET] Get task stats
+const getTaskStats = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const total = await Task.countDocuments({ userId });
+    const pending = await Task.countDocuments({ userId, done: false });
+    const completed = await Task.countDocuments({ userId, done: true });
+    const startOfDay = new Date();
+    startOfDay.setHours(0, 0, 0, 0);
+    const completedToday = await Task.countDocuments({
+      userId,
+      done: true,
+      date: { $gte: startOfDay },
+    });
+    const now = new Date();
+    const overdue = await Task.countDocuments({
+      userId,
+      completed: false,
+      date: { $lt: now },
+    });
+
+    res.json({ total, pending, completed, completedToday, overdue });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   getAllTasks,
   createTask,
@@ -220,5 +247,6 @@ module.exports = {
   toggleImportant,
   deleteTask,
   createBulkTasks,
-  clearTasks
+  clearTasks,
+  getTaskStats
 };

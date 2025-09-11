@@ -275,6 +275,7 @@ router.put('/:id', authMiddleware, taskController.replaceTask);
  *         description: All tasks deleted successfully
  */
 router.delete('/clear', authMiddleware, taskController.clearTasks);
+
 /**
  * @swagger
  * /tasks/{id}:
@@ -295,5 +296,44 @@ router.delete('/clear', authMiddleware, taskController.clearTasks);
  *         description: Task deleted successfully
  */
 router.delete('/:id', authMiddleware, taskController.deleteTask);
+
+/**
+ * @swagger
+ * /tasks/stats:
+ *   get:
+ *     summary: Get task statistics for the logged-in user
+ *     description: Returns statistics including total tasks, pending tasks, completed tasks, tasks completed today, and overdue tasks.
+ *     tags: [Tasks]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Statistics retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 total:
+ *                   type: integer
+ *                   example: 42
+ *                 pending:
+ *                   type: integer
+ *                   example: 10
+ *                 completed:
+ *                   type: integer
+ *                   example: 25
+ *                 completedToday:
+ *                   type: integer
+ *                   example: 5
+ *                 overdue:
+ *                   type: integer
+ *                   example: 2
+ *       401:
+ *         description: Unauthorized - user not logged in
+ *       500:
+ *         description: Server error
+ */
+router.get("/stats", authMiddleware, taskController.getTaskStats);
 
 module.exports = router;
