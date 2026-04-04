@@ -12,40 +12,38 @@ const getAllTasks = async (req, res) => {
       filter.tags = { $in: tagsArray };
     }
 
-    if (priority) {
-      filter.priority = priority;
-    }
-
-    if (title) {
-      filter.title = { $regex: title, $options: 'i' };
-    }
-
-    if (description) {
-      filter.description = { $regex: description, $options: 'i' };
-    }
-
-    if (done !== undefined) {
-      filter.done = done === 'true';
-    }
-
-    if (important !== undefined) {
-      filter.important = important === 'true';
-    }
+    if (priority) filter.priority = priority;
+    if (title) filter.title = { $regex: title, $options: 'i' };
+    if (description) filter.description = { $regex: description, $options: 'i' };
+    if (done !== undefined) filter.done = done === 'true';
+    if (important !== undefined) filter.important = important === 'true';
 
     if (starDate || endDate) {
       filter.date = {};
-      if (starDate) {
-        filter.date.$gte = new Date(starDate);
-      }
-      if (endDate) {
-        filter.date.$lt = new Date(endDate);
-      }
+      if (starDate) filter.date.$gte = new Date(starDate);
+      if (endDate) filter.date.$lt = new Date(endDate);
     }
 
-    const tasks = await Task.find(filter)
+    const sortOrder = order === 'asc' ? 1 : -1;
+
+    const tasks = await Task.aggregate([
+      { $match: filter },
+      { $addFields: { 
+        _hasNoDtate: { $cond: [{ $ifNull: ['$date', false] }, 0, 1] } 
+        }  
+      },
+      { $sort: { 
+        _hasNoDtate: 1,
+        [sort]: sortOrder } },
+      { $skip: (Number(page) - 1) * (Number(limit) || 0) },
+      ...(limit ? [{ $limit: Number(limit) }] : []),
+      { $unset: '_hasNoDtate' } 
+    ]);
+
+    /*const tasks = await Task.find(filter)
       .sort({ [sort]: order === 'asc' ? 1 : -1 })
       .skip((page - 1) * limit)
-      .limit(Number(limit));
+      .limit(Number(limit));*/
 
     res.status(200).json(tasks);
 
