@@ -40,11 +40,6 @@ const getAllTasks = async (req, res) => {
       { $unset: '_hasNoDtate' } 
     ]);
 
-    /*const tasks = await Task.find(filter)
-      .sort({ [sort]: order === 'asc' ? 1 : -1 })
-      .skip((page - 1) * limit)
-      .limit(Number(limit));*/
-
     res.status(200).json(tasks);
 
   } catch (error) {
@@ -52,10 +47,34 @@ const getAllTasks = async (req, res) => {
   }
 };
 
+// [GET] Get a single task by ID
+const getTaskById = async (req, res) => {
+  try {
+    const task = await Task.findOne({
+      _id: req.params.id,
+      userId: req.user._id
+    });
+
+    if (!task) {
+      return res.status(404).json({ message: 'Task not found or not yours.' });
+    }
+
+    return res.status(200).json(task);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
 // [POST] Create a new task
 const createTask = async (req, res) => {
   try {
-    const { title, description, priority, important, tags = [], date, userId } = req.body;
+    const { title, description, priority, important, tags = [], date, userId, parentTask } = req.body;
+    
+    if (parentTask) {
+      const parent = await Task.findOne({ _id: parentTask, userId });
+      if (!parent) return res.status(400).json({ message: 'Parent task not found or not yours.' });
+    }
+
     const task = new Task({
       title,
       description,
@@ -64,11 +83,38 @@ const createTask = async (req, res) => {
       tags,
       date: date ? new Date(date) : null,
       userId,
+      parentTask: parentTask || null
     });
     const savedTask = await task.save();
     res.status(201).json(savedTask);
   } catch (error) {
     res.status(400).json({ message: error.message });
+  }
+};
+
+// [GET] Get subtasks of a task
+const getSubtasks = async (req, res) => {
+  try {
+    const subtasks = await Task.find({ 
+      parentTask: req.params.id, 
+      userId: req.user._id
+    });
+    res.status(200).json(subtasks);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// [GET] GetTaskTree
+const getTaskTree = async (req, res) => {
+  try {
+    const root = await Task.findOne({ _id: req.params.id, userId: req.user._id });
+    if (!root) return res.status(404).json({ message: 'Task not found or not yours.' });
+
+    const tree = await buildTree(root, req.user._id);
+    res.status(200).json(tree);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 };
 
@@ -160,9 +206,16 @@ const toggleImportant = async (req, res) => {
 
 // [DELETE] Delete a task
 const deleteTask = async (req, res) => {
-  const result = await Task.findOneAndDelete({ _id: req.params.id, userId: req.user._id });
-  if (!result) return res.status(404).json({ message: 'Task not found or not yours.' });
-  res.status(204).send();
+  try {
+    const task = await Task.findOne({ _id: req.params.id, userId: req.user._id });
+    if (!task) return res.status(404).json({ message: 'Task not found or not yours.' });
+    
+    await deletTaskRecursive(req.params.id, req.user._id);
+
+    res.status(204).send();
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };
 
 // [POST] Create multiple tasks
@@ -236,8 +289,23 @@ const getTaskStats = async (req, res) => {
   }
 };
 
+async function deletTaskRecursive(taskId, userId) {
+  const children = await Task.find({ parentTask: taskId, userId });
+  for (const child of children) {
+    await deletTaskRecursive(child._id, userId);
+  }
+  await Task.findByIdAndDelete(taskId);
+}
+
+async function buildTree(task, userId) {
+  const children = await Task.find({ parentTask: task._id, userId });
+  const childTrees = await Promise.all(children.map(c => buildTree(c, userId)));
+  return { ...task.toObject(), subtasks: childTrees };
+}
+
 module.exports = {
   getAllTasks,
+  getTaskById,
   createTask,
   replaceTask,
   updateTask,
@@ -246,5 +314,7 @@ module.exports = {
   deleteTask,
   createBulkTasks,
   clearTasks,
-  getTaskStats
+  getTaskStats,
+  getSubtasks,
+  getTaskTree
 };
